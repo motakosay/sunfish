@@ -12,6 +12,43 @@ from collections import namedtuple, defaultdict
 
 version = "sunfish 2023"
 
+import sys
+
+RUBIK_MODE = "-Rubik_mode" in sys.argv
+
+rubik_moves = [
+    "e2e4", "b8c6",
+    "b1c3", "g8f6",
+    "d2d4", "e7e5",
+    "d4e5", "c6e5",
+    "f2f4", "e5c6",
+    "c1d2", "d7d6",
+    "g1f3", "d8e7",
+    "d1e2", "c6b4",
+    "a1c1", "f6d7",
+    "a2a3", "c7c6",
+    "f3d4", "c6c5",
+    "d4f5", "b4c2",
+    "c1c2", "e7d8",
+    "c3d5", "h7h6",
+    "e2b5", "a7a6",
+    "b5a4", "b7b5",
+    "f1b5", "h6h5",
+    "b5c6", "a8b8",
+    "e4e5", "d6e5",
+    "d2a5", "b8b4",
+    "a3b4", "d8a5",
+    "d5f6", "g7f6",
+    "b4a5", "h8g8",
+    "c2d2", "g8g2",
+    "c6d7", "e8d8",
+    "a4c6", "e5e4",
+    "d7e6", "c8d7",
+    "c6d7"
+]
+
+rubik_index = 0
+
 ###############################################################################
 # Piece-Square tables. Tune these to change sunfish's behaviour
 ###############################################################################
@@ -469,12 +506,35 @@ while True:
         break
 
     elif args[:2] == ["position", "startpos"]:
+        
         del hist[1:]
-        for ply, move in enumerate(args[3:]):
-            i, j, prom = parse(move[:2]), parse(move[2:4]), move[4:].upper()
-            if ply % 2 == 1:
-                i, j = 119 - i, 119 - j
+
+        global rubik_index
+
+        played_moves = args[3:]
+
+        # Check user moves against Rubik line
+        if RUBIK_MODE:
+            
+            for idx, move in enumerate(played_moves):
+                
+                if idx >= len(rubik_moves):
+                    break
+                
+                expected = rubik_moves[idx]
+                if move != expected:
+                    print("you should review the game!")
+                    break
+                    
+        
+         # normal board update
+         for ply, move in enumerate(played_moves):
+             i, j, prom = parse(move[:2]), parse(move[2:4]), move[4:].upper()
+             
+             if ply % 2 == 1:
+                 i, j = 119 - i, 119 - j
             hist.append(hist[-1].move(Move(i, j, prom)))
+        rubik_index = len(played_moves)
 
     elif args[0] == "go":
         wtime, btime, winc, binc = [int(a) / 1000 for a in args[2::2]]
@@ -484,6 +544,14 @@ while True:
 
         start = time.time()
         move_str = None
+        if RUBIK_MODE and rubik_index < len(rubik_moves):
+            
+            engine_move = rubik_moves[rubik_index]
+            
+            print("bestmove", engine_move)
+            
+            continue
+            
         for depth, gamma, score, move in Searcher().search(hist):
             # The only way we can be sure to have the real move in tp_move,
             # is if we have just failed high.
