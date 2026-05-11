@@ -18,6 +18,7 @@ parser.add_argument("-cmd", nargs="?", help="Command of (UCI) engine to use")
 parser.add_argument("-conf", nargs="?", help="Location of engines.json file to use")
 parser.add_argument("-name", nargs="?", help="Name of engine to use from conf")
 parser.add_argument("-selfplay", action="store_true", help="Play against itself")
+parser.add_argument("-bothhumans", action="store_true", help="Play human vs human")
 parser.add_argument("-debug", action="store_true", help="Enable debugging of engine")
 parser.add_argument("-movetime", type=int, default=0, help="Movetime in ms")
 parser.add_argument("-nodes", type=int, default=0, help="Maximum nodes")
@@ -90,8 +91,10 @@ def get_user_move(board):
 
 def get_user_color():
     color = ""
-    while color not in ("white", "black"):
-        color = input("Do you want to be white or black? ")
+    while color not in ("white", "black", "both"):
+        color = input("Do you want to be white or black? (or 'both' for human vs human): ").lower()
+    if color == "both":
+        return "both"
     return chess.WHITE if color == "white" else chess.BLACK
 
 
@@ -192,8 +195,11 @@ async def get_engine_move(engine, board, limit, game_id, multipv, debug=False):
         return analysis.info["pv"][0]
 
 
-async def play(engine, board, selfplay, pvs, time_limit, debug=False):
-    if not selfplay:
+async def play(engine, board, selfplay, bothhumans, pvs, time_limit, debug=False):
+    if bothhumans:
+        user_color = "both"
+        print("Playing human vs human mode!")
+    elif not selfplay:
         user_color = get_user_color()
     else:
         user_color = chess.WHITE
@@ -204,8 +210,17 @@ async def play(engine, board, selfplay, pvs, time_limit, debug=False):
     game_id = random.random()
 
     while not board.is_game_over():
-        print_unicode_board(board, perspective=user_color)
-        if not selfplay and user_color == board.turn:
+        perspective = chess.WHITE if board.turn else chess.BLACK
+        print_unicode_board(board, perspective=perspective)
+        
+        if bothhumans:
+            # Both humans - always get user input
+            player_color = "White" if board.turn == chess.WHITE else "Black"
+            print(f"{player_color}'s turn")
+            move = get_user_move(board)
+            if move is None:
+                return
+        elif not selfplay and user_color == board.turn:
             move = get_user_move(board)
             if move is None:
                 return
@@ -217,7 +232,8 @@ async def play(engine, board, selfplay, pvs, time_limit, debug=False):
         board.push(move)
 
     # Print status
-    print_unicode_board(board, perspective=user_color)
+    perspective = chess.WHITE if board.turn else chess.BLACK
+    print_unicode_board(board, perspective=perspective)
     print("Result:", board.result())
 
 
@@ -228,6 +244,20 @@ async def main():
         logging.basicConfig(level=logging.DEBUG)
     else:
         logging.basicConfig(level=logging.ERROR)
+
+    # If bothhumans mode, we don't need an engine
+    if args.bothhumans:
+        board = chess.Board(args.fen)
+        await play(
+            engine=None,
+            board=board,
+            selfplay=False,
+            bothhumans=True,
+            pvs=args.pvs,
+            time_limit=None,
+            debug=args.debug,
+        )
+        return
 
     if not args.conf:
         if args.cmd:
@@ -270,6 +300,7 @@ async def main():
             engine,
             board,
             selfplay=args.selfplay,
+            bothhumans=args.bothhumans,
             pvs=args.pvs,
             time_limit=limit,
             debug=args.debug,
