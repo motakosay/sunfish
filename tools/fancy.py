@@ -304,7 +304,7 @@ async def main():
             engine=None,
             board=board,
             selfplay=False,
-            bothhumans=True,
+            bothhumans=False,
             Rubik_mode=True,
             pvs=args.pvs,
             time_limit=None,
