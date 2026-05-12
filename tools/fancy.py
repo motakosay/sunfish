@@ -269,6 +269,10 @@ async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit,
             move = get_user_move(board)
             if move is None:
                 return
+        elif Rubik_mode:
+            move = get_user_move(board) #edit get_user_move
+            if move is None:
+                return
         elif not selfplay and user_color == board.turn:
             move = get_user_move(board)
             if move is None:
