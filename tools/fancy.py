@@ -260,7 +260,6 @@ def rubik_quiz(board, rubik_moves):
                 return
 
             board.push(user_move)
-            rubik_index += 1
 
         else:
             # Computer move — show it, apply it, then loop back to print updated board
@@ -311,7 +310,6 @@ async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit,
                 return
             if move is None:
                 return
-            rubik_index += 1
         elif not selfplay and user_color == board.turn:
             move = get_user_move(board)
             if move is None:
@@ -322,6 +320,7 @@ async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit,
             )
             print(f" My move: {board.san(move)}")
         board.push(move)
+        rubik_index += 1
 
     # Print status
     perspective = chess.WHITE if board.turn else chess.BLACK
