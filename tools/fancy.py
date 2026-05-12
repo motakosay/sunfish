@@ -243,11 +243,13 @@ async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit,
     if bothhumans:
         user_color = "both"
         print("Playing human vs human mode!")
-    elif not selfplay:
-        user_color = get_user_color()
+        
     elif Rubik_mode:
         user_color = chess.WHITE
         print("Human playing with computer mode!")
+        
+    elif not selfplay:
+        user_color = get_user_color()
     else:
         user_color = chess.WHITE
 
