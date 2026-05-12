@@ -35,7 +35,7 @@ parser.add_argument(
     help="Start from given position",
     default="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
 )
-parser.add_argument("-Rubik_mode", action="store_true", help="Enable Rubik training mode")
+parser.add_argument("-Rubik_mode", action="store_true", help="play to win")
 
 
 async def load_engine_from_cmd(cmd, debug=False):
