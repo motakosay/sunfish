@@ -1,10 +1,10 @@
 # Sunfish Fancy Mode
 
-A modified interface and training extension for the Sunfish chess engine.
+A modified interface for the Sunfish chess engine.
 
 ## Features
 
-- Human vs Human local play
+- Human playing with Human (local play)
 - Original Sunfish engine support
 - Rubik Mode for move memorization and training
 - Replay memorized move sequences
@@ -21,7 +21,7 @@ A modified interface and training extension for the Sunfish chess engine.
 
 ## Usage
 
-### Human vs Human Mode (new feature)
+### Human playing with Human Mode (new feature)
 
 ```bash
 python tools/fancy.py -bothhumans
