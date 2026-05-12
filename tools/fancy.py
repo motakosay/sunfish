@@ -302,13 +302,20 @@ async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit,
             if move is None:
                 return
         elif Rubik_mode:
-            move = get_user_move(board) #edit get_user_move
-            print (expected_move)
-            if move.uci() != expected_move:
-                print("you should review the game!")
-                return
-            if move is None:
-                return
+            expected_move = rubik_moves[rubik_index]
+
+            if board.turn == chess.WHITE:  # User plays White
+                move = get_user_move(board)
+                if move is None:
+                    return
+                if move.uci() != expected_move:
+                    print("you should review the game!")
+                    return
+                else:  # Computer plays Black
+                    move = chess.Move.from_uci(expected_move)
+                    print(f"Computer plays: {board.san(move)}")
+                board.push(move) #or to remove
+                rubik_index += 1 #or to remove
         elif not selfplay and user_color == board.turn:
             move = get_user_move(board)
             if move is None:
