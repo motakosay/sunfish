@@ -1,0 +1,6 @@
+[
+  {
+    "name": "Sunfish Rubik",
+    "command": "python ../sunfish.py -Rubik_mode"
+  }
+]
