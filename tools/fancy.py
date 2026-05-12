@@ -303,6 +303,7 @@ async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit,
                 return
         elif Rubik_mode:
             move = get_user_move(board) #edit get_user_move
+            print (expected_move)
             if move != expected_move:
                 print("you should review the game!")
                 return
