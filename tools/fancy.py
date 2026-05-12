@@ -304,6 +304,8 @@ async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit,
         elif Rubik_mode:
             expected_move = rubik_moves[rubik_index]
 
+            player_color = "White"
+
             if board.turn == chess.WHITE:  # User plays White
                 move = get_user_move(board)
                 if move is None:
