@@ -12,39 +12,6 @@ import pathlib
 import logging
 import math
 
-
-rubik_moves = [
-    "e2e4", "b8c6",
-    "b1c3", "g8f6",
-    "d2d4", "e7e5",
-    "d4e5", "c6e5",
-    "f2f4", "e5c6",
-    "c1d2", "d7d6",
-    "g1f3", "d8e7",
-    "d1e2", "c6b4",
-    "a1c1", "f6d7",
-    "a2a3", "c7c6",
-    "f3d4", "c6c5",
-    "d4f5", "b4c2",
-    "c1c2", "e7d8",
-    "c3d5", "h7h6",
-    "e2b5", "a7a6",
-    "b5a4", "b7b5",
-    "f1b5", "h6h5",
-    "b5c6", "a8b8",
-    "e4e5", "d6e5",
-    "d2a5", "b8b4",
-    "a3b4", "d8a5",
-    "d5f6", "g7f6",
-    "b4a5", "h8g8",
-    "c2d2", "g8g2",
-    "c6d7", "e8d8",
-    "a4c6", "e5e4",
-    "d7e6", "c8d7",
-    "c6d7"
-]
-
-
 parser = argparse.ArgumentParser()
 parser.add_argument("-cmd", nargs="?", help="Command of (UCI) engine to use")
 parser.add_argument("-conf", nargs="?", help="Location of engines.json file to use")
@@ -271,6 +238,37 @@ def rubik_quiz(board, rubik_moves):
     print_unicode_board(board, perspective=chess.WHITE)
 
 async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit, debug=False):
+    
+    rubik_moves = [
+        "e2e4", "b8c6",
+        "b1c3", "g8f6",
+        "d2d4", "e7e5",
+        "d4e5", "c6e5",
+        "f2f4", "e5c6",
+        "c1d2", "d7d6",
+        "g1f3", "d8e7",
+        "d1e2", "c6b4",
+        "a1c1", "f6d7",
+        "a2a3", "c7c6",
+        "f3d4", "c6c5",
+        "d4f5", "b4c2",
+        "c1c2", "e7d8",
+        "c3d5", "h7h6",
+        "e2b5", "a7a6",
+        "b5a4", "b7b5",
+        "f1b5", "h6h5",
+        "b5c6", "a8b8",
+        "e4e5", "d6e5",
+        "d2a5", "b8b4",
+        "a3b4", "d8a5",
+        "d5f6", "g7f6",
+        "b4a5", "h8g8",
+        "c2d2", "g8g2",
+        "c6d7", "e8d8",
+        "a4c6", "e5e4",
+        "d7e6", "c8d7",
+        "c6d7"
+    ]
     rubik_index = 0
     if bothhumans:
         user_color = "both"
