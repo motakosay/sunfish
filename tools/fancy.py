@@ -44,7 +44,6 @@ rubik_moves = [
     "c6d7"
 ]
 
-rubik_index = 0
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-cmd", nargs="?", help="Command of (UCI) engine to use")
@@ -272,6 +271,7 @@ def rubik_quiz(board, rubik_moves):
     print_unicode_board(board, perspective=chess.WHITE)
 
 async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit, debug=False):
+    rubik_index = 0
     if bothhumans:
         user_color = "both"
         print("Playing human vs human mode!")
