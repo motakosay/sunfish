@@ -196,55 +196,43 @@ async def get_engine_move(engine, board, limit, game_id, multipv, debug=False):
         return analysis.info["pv"][0]
 
 def rubik_quiz(board, rubik_moves):
-    """
-    Runs the Rubik memory quiz.
-    User is White (even indices: 0, 2, 4, ...)
-    Computer is Black (odd indices: 1, 3, 5, ...)
-    User types their memorized moves; if wrong -> 'you should review the game!'
-    """
-    user_moves = ["e2e4", "b1c3", "d2d4"]   # the 3 moves the user must remember
-
-    # Build expected sequence: user move, then computer reply, interleaved
-    # rubik_moves[0] = user, [1] = computer, [2] = user, [3] = computer ...
-    rubik_index = 0
-
     print("\n=== RUBIK MODE ===")
-    print("You are White. Reproduce the memorized moves from the sequence.")
+    print("You are White. Reproduce the memorized moves.")
     print("Type moves in UCI format (e.g. e2e4). Type 'quit' to exit.\n")
 
+    rubik_index = 0
+
     while rubik_index < len(rubik_moves):
+        # Print board FIRST, before anything else
         perspective = chess.WHITE if board.turn == chess.WHITE else chess.BLACK
         print_unicode_board(board, perspective=perspective)
 
         expected = rubik_moves[rubik_index]
-        expected_move = chess.Move.from_uci(expected)
 
         if board.turn == chess.WHITE:
-            # User's turn — ask for input
             uci = input("Your move: ").strip()
             if uci in ("quit", "exit"):
                 return
 
-            # Validate format
             try:
                 user_move = chess.Move.from_uci(uci)
             except ValueError:
                 print("Invalid format. Use UCI notation like e2e4.")
-                continue  # re-prompt same move, don't advance index
+                continue  # re-print board and re-prompt
 
-            # Check against expected
             if uci != expected:
-                print(f"you should review the game!")
-                print(f"(Expected: {expected})")
-                return  # end session on mistake
+                print(f"\nyou should review the game!")
+                print(f"Expected: {expected}")
+                print_unicode_board(board, perspective=chess.WHITE)
+                return
 
-            # Correct — apply the move
             board.push(user_move)
             rubik_index += 1
 
         else:
-            # Computer's turn — play automatically from rubik_moves
-            print(f"Computer plays: {expected}")
+            # Computer move — show it, apply it, then loop back to print updated board
+            expected_move = chess.Move.from_uci(expected)
+            print(f"  Computer plays: {expected}\n")
             board.push(expected_move)
             rubik_index += 1
 
