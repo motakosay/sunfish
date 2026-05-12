@@ -506,35 +506,34 @@ while True:
         break
 
     elif args[:2] == ["position", "startpos"]:
-        
-        del hist[1:]
 
-        global rubik_index
+    del hist[1:]
 
-        played_moves = args[3:]
+    played_moves = args[3:]
 
-        # Check user moves against Rubik line
-        if RUBIK_MODE:
-            
-            for idx, move in enumerate(played_moves):
-                
-                if idx >= len(rubik_moves):
-                    break
-                
-                expected = rubik_moves[idx]
-                if move != expected:
-                    print("you should review the game!")
-                    break
-                    
-        
-         # normal board update
-         for ply, move in enumerate(played_moves):
-             i, j, prom = parse(move[:2]), parse(move[2:4]), move[4:].upper()
-             
-             if ply % 2 == 1:
-                 i, j = 119 - i, 119 - j
-            hist.append(hist[-1].move(Move(i, j, prom)))
-        rubik_index = len(played_moves)
+    # Rubik mode checking
+    if RUBIK_MODE:
+
+        for idx, move in enumerate(played_moves):
+
+            if idx >= len(rubik_moves):
+                break
+
+            expected = rubik_moves[idx]
+
+            if move != expected:
+                print("you should review the game!")
+                break
+
+    # Normal board update
+    for ply, move in enumerate(played_moves):
+
+        i, j, prom = parse(move[:2]), parse(move[2:4]), move[4:].upper()
+
+        if ply % 2 == 1:
+            i, j = 119 - i, 119 - j
+
+        hist.append(hist[-1].move(Move(i, j, prom)))
 
     elif args[0] == "go":
         wtime, btime, winc, binc = [int(a) / 1000 for a in args[2::2]]
