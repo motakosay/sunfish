@@ -302,6 +302,8 @@ async def main():
         logging.basicConfig(level=logging.ERROR)
 
     if args.Rubik_mode:
+        import sys, os
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))  # add sunfish root
         from sunfish import rubik_moves
         board = chess.Board()
         rubik_quiz(board, rubik_moves)
