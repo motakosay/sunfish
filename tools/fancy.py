@@ -239,12 +239,15 @@ def rubik_quiz(board, rubik_moves):
     print("\nCongratulations! You Win!")
     print_unicode_board(board, perspective=chess.WHITE)
 
-async def play(engine, board, selfplay, bothhumans, pvs, time_limit, debug=False):
+async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit, debug=False):
     if bothhumans:
         user_color = "both"
         print("Playing human vs human mode!")
     elif not selfplay:
         user_color = get_user_color()
+    elif Rubik_mode:
+        user_color = chess.WHITE
+        print("Human playing with computer mode!")
     else:
         user_color = chess.WHITE
 
@@ -302,6 +305,7 @@ async def main():
             board=board,
             selfplay=False,
             bothhumans=True,
+            Rubik_mode=True,
             pvs=args.pvs,
             time_limit=None,
             debug=args.debug,
@@ -316,6 +320,7 @@ async def main():
             board=board,
             selfplay=False,
             bothhumans=True,
+            Rubik_mode=False,
             pvs=args.pvs,
             time_limit=None,
             debug=args.debug,
