@@ -301,6 +301,12 @@ async def main():
     else:
         logging.basicConfig(level=logging.ERROR)
 
+    if args.Rubik_mode:
+        from sunfish import rubik_moves
+        board = chess.Board()
+        rubik_quiz(board, rubik_moves)
+        return
+
     # If bothhumans mode, we don't need an engine
     if args.bothhumans:
         board = chess.Board(args.fen)
