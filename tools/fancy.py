@@ -17,7 +17,7 @@ parser.add_argument("-cmd", nargs="?", help="Command of (UCI) engine to use")
 parser.add_argument("-conf", nargs="?", help="Location of engines.json file to use")
 parser.add_argument("-name", nargs="?", help="Name of engine to use from conf")
 parser.add_argument("-selfplay", action="store_true", help="Play against itself")
-parser.add_argument("-bothhumans", action="store_true", help="Play human vs human")
+parser.add_argument("-bothhumans", action="store_true", help="human play with human")
 parser.add_argument("-debug", action="store_true", help="Enable debugging of engine")
 parser.add_argument("-movetime", type=int, default=0, help="Movetime in ms")
 parser.add_argument("-nodes", type=int, default=0, help="Maximum nodes")
@@ -92,7 +92,7 @@ def get_user_move(board):
 def get_user_color():
     color = ""
     while color not in ("white", "black", "both"):
-        color = input("Do you want to be white or black? (or 'both' for human vs human): ").lower()
+        color = input("Do you want to be white or black? (or 'both' for human play with human): ").lower()
     if color == "both":
         return "both"
     return chess.WHITE if color == "white" else chess.BLACK
@@ -272,7 +272,7 @@ async def play(engine, board, selfplay, bothhumans, Rubik_mode, pvs, time_limit,
     rubik_index = 0
     if bothhumans:
         user_color = "both"
-        print("Playing human vs human mode!")
+        print("human play with human mode!")
         
     elif Rubik_mode:
         user_color = chess.WHITE
