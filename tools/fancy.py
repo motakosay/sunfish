@@ -371,6 +371,7 @@ async def main():
             board,
             selfplay=args.selfplay,
             bothhumans=args.bothhumans,
+            Rubik_mode=args.Rubik_mode,
             pvs=args.pvs,
             time_limit=limit,
             debug=args.debug,
