@@ -1,6 +1,5 @@
-[
-  {
-    "name": "Sunfish Rubik",
+{
+  "Sunfish Rubik": {
     "command": "python3 ../sunfish.py -Rubik_mode"
   }
-]
+}
